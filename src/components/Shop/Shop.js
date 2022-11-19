@@ -5,6 +5,7 @@ import './Shop.css';
 const Shop = () => {
     // data set and load from extenal source 
     const [products, setProducts] = useState([]);
+    const [cart, setCart] = useState([]);
 
     useEffect(() => {
         fetch('products.json')
@@ -12,8 +13,12 @@ const Shop = () => {
             .then(data => setProducts(data))
     }, []);
 
+    // declear handle add to cart button 
     const handleAddToCart = (product) => {
-        console.log(product)
+        // console.log(product)
+        const newCart = [...cart, product];
+        setCart(newCart);
+
     }
 
     return (
@@ -24,7 +29,7 @@ const Shop = () => {
                 }
             </div>
             <div className="cart-container">
-                <Cart></Cart>
+                <Cart cart={cart}></Cart>
             </div>
         </div>
     );

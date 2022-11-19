@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { addToDb } from '../../utilities/fakedb';
+import { addToDb, getStoredCart } from '../../utilities/fakedb';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
 import './Shop.css';
@@ -13,6 +13,23 @@ const Shop = () => {
             .then(res => res.json())
             .then(data => setProducts(data))
     }, []);
+
+    // get dat from loca storage and load it 
+    useEffect(() => {
+        const storedCart = getStoredCart();
+        // console.log(getStored);
+        const saveCart = [];
+        for (const id in storedCart) {
+            const addedProduct = products.find(product => product.id === id);
+            if (addedProduct) {
+                const quentity = storedCart[id];
+                addedProduct.quentiry = quentity;
+                saveCart.push(addedProduct);
+            }
+        }
+        setCart(saveCart)
+    }, [products]);
+
 
     // declear handle add to cart button 
     const handleAddToCart = (product) => {

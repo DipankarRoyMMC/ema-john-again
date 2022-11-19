@@ -23,24 +23,32 @@ const Shop = () => {
             const addedProduct = products.find(product => product.id === id);
             if (addedProduct) {
                 const quentity = storedCart[id];
-                addedProduct.quentiry = quentity;
+                addedProduct.quentity = quentity;
                 saveCart.push(addedProduct);
             }
+            setCart(saveCart)
         }
-        setCart(saveCart)
     }, [products]);
 
-
     // declear handle add to cart button 
-    const handleAddToCart = (product) => {
-        // console.log(product)
-        const newCart = [...cart, product];
+    const handleAddToCart = (selectedProduct) => {
+        // console.log(selectedProduct);
+        let newCart = [];
+        const exist = cart.find(product => product.id === selectedProduct.id);
+        if (!exist) {
+            selectedProduct.quentity = 1;
+            newCart = [...cart, selectedProduct];
+        } else {
+            const rest = cart.filter(product => product.id !== selectedProduct.id);
+            exist.quentity = exist.quentity + 1;
+            newCart = [...rest, exist];
+        }
         setCart(newCart);
 
-        addToDb(product.id);
+        //  save data in local storage 
+        addToDb(selectedProduct.id);
 
     }
-
     return (
         <div className="shop-container">
             <div className="products-container">
@@ -54,5 +62,4 @@ const Shop = () => {
         </div>
     );
 };
-
 export default Shop;
